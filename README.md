@@ -2,6 +2,16 @@
 
 Reactでフロントエンドバリデーションを実装する際の、自分なりの実装案
 
+## 使用ライブラリ
+
+- React Hook Form
+- Zod
+  - inferによる型生成が好きなので
+
+## 動作デモ
+
+https://tranquil-blancmange-3e1bdf.netlify.app/
+
 ## 新規フォームを作成する際の手順
 
 「要約」 `components/Form/concrete/SampleForm` と `pages/index.tsx` を真似て実装。
