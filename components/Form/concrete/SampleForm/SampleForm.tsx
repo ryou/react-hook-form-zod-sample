@@ -20,7 +20,7 @@ const ItemInformation = ({
   onClickDelete,
 }: ItemInformationProps) => {
   return (
-    <div className={classNames(['py-4', 'px-4', 'bg-gray-50', 'rounded'])}>
+    <div className={classNames(['py-4', 'px-4', 'bg-base-200', 'rounded'])}>
       <div className={classNames(['mb-8'])}>
         <FormGroup title="商品名">
           <InputWithValidation

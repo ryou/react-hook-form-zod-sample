@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       className={classNames([
         'max-w-xl',
         'mx-auto',
-        'bg-white',
+        'bg-base-100',
         'py-8',
         'px-4',
       ])}
