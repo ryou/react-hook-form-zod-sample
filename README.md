@@ -25,6 +25,24 @@ https://tranquil-blancmange-3e1bdf.netlify.app/
 
 ## 課題
 
+### formの入れ子をする方法に関して
+
+HTMLの仕様上、formタグの入れ子が許されていないので、formの入れ子が必要な際に工夫が必要となる。
+
+選択肢としては
+
+1. バリデーションとEnterによる送信を諦めてformタグを使用しない
+2. formの入れ子が発生しないようにHTMLを構築する
+3. [form属性](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input#attr-form) を使用する
+
+1または2の解決策が取れるのであれば、それで解決する。
+
+1に関してはReactHookFormでなく、制御コンポーネントでの実装を前提としたバリデーションの仕組みを整えているのであれば、Enterによる送信を諦めるだけでいける。（個人的にはフロントエンドバリデーションはそこまで頑張る物ではないと思っているので、さっさとフロントエンドバリデーションを諦めるのが良いと思うが）
+
+2に関しては、フォーム内にモーダルダイアログがあり、そのモーダルダイアログ内にもformがあるケースなどでは [Portal](https://ja.reactjs.org/docs/portals.html) で解決する等があると思う。
+
+汎用的な解決策としては3となる。form関係のタグには `form` 属性が用意されており、それを指定すると入れ子関係にないformタグと関連付けることが出来る。 `pages/nested_form.tsx` に実装メモとしてコードを残しておく。
+
 ### useFormContextを使うと、間違ったnameをInputWithValidationとかに指定してもコンパイルが通ってしまう
 
 元々useFormContextを使用していたが、フォームのスキーマに存在しないnameをInputWithValidationとかに指定してもコンパイルが通ってしまっていた。

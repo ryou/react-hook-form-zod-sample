@@ -11,6 +11,7 @@ type Props<T> = {
   name: Path<T>
   placeholder?: string
   disabled?: boolean
+  form?: string
 }
 export const InputWithValidation = <T,>({
   useFormReturn,
@@ -18,6 +19,7 @@ export const InputWithValidation = <T,>({
   name,
   placeholder,
   disabled,
+  form,
 }: Props<T>) => {
   const errorMessages = getRHFErrorMessages(useFormReturn, name)
 
@@ -28,6 +30,7 @@ export const InputWithValidation = <T,>({
         type={type}
         placeholder={placeholder}
         disabled={disabled}
+        form={form}
         isError={errorMessages.length > 0}
       />
       {errorMessages.length > 0 && (
