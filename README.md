@@ -12,17 +12,6 @@ Reactでフロントエンドバリデーションを実装する際の、自分
 
 https://tranquil-blancmange-3e1bdf.netlify.app/
 
-## 新規フォームを作成する際の手順
-
-「要約」 `components/Form/concrete/SampleForm` と `pages/index.tsx` を真似て実装。
-
-- フォームの名前を決める（例：ExampleForm、以降ExampleFormを例として記述）
-- `components/Form/concrete` に `ExampleForm` ディレクトリを作成
-- 作成したディレクトリに、 `ExampleForm.tsx` と `useExampleForm.ts` を作成
-- `useExampleForm.ts` にて、フォームのスキーマを作成し、スキーマの型 `ExampleFormSchema` と `useExampleForm` をexport
-- `ExampleForm.tsx` にて、フォームの実装をする
-- ページ側の実装は `pages/index.tsx` を参考に
-
 ## 課題
 
 ### formの入れ子をする方法に関して
@@ -42,29 +31,6 @@ HTMLの仕様上、formタグの入れ子が許されていないので、form�
 2に関しては、フォーム内にモーダルダイアログがあり、そのモーダルダイアログ内にもformがあるケースなどでは [Portal](https://ja.reactjs.org/docs/portals.html) で解決する等があると思う。
 
 汎用的な解決策としては3となる。form関係のタグには `form` 属性が用意されており、それを指定すると入れ子関係にないformタグと関連付けることが出来る。 `pages/nested_form.tsx` に実装メモとしてコードを残しておく。
-
-### useFormContextを使うと、間違ったnameをInputWithValidationとかに指定してもコンパイルが通ってしまう
-
-元々useFormContextを使用していたが、フォームのスキーマに存在しないnameをInputWithValidationとかに指定してもコンパイルが通ってしまっていた。
-
-例えば以下のようなコードのコンパイルが通ってしまう。
-
-```typescript jsx
-const schema = z.object({
-  userName: z.string(),
-})
-
-const someForm = () => {
-  return (
-    // nが小文字になっているがエラーにならない
-    <InputWithValidation name="username" />
-  )
-}
-```
-
-なので、useFormContextを使用せず、useFormの返り値をバケツリレーする実装にしている。
-
-何か良い解決案があればContextの使用を再考する。
 
 ### Next.jsの場合、input:fileをバリデーションしようとすると、FileList型がサーバーサイドでランタイムエラーが発生するので出来ない。
 

@@ -1,8 +1,9 @@
-import { DefaultValues } from 'react-hook-form'
+import { DefaultValues, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 import { ZodFormSchema } from '../../../../libs/ZodFormSchema'
 import { useDefaultForm } from '../../hooks/useDefaultForm'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ReactNode } from 'react'
 
 const sampleFormSchema = z.object({
   fullName: z.object({
@@ -25,11 +26,15 @@ const sampleFormSchema = z.object({
 
 export type SampleFormSchema = z.infer<typeof sampleFormSchema>
 
-export const useSampleForm = (
+type Props = {
   defaultValues: DefaultValues<SampleFormSchema>
-) => {
-  return useDefaultForm<SampleFormSchema>(
+  children: ReactNode
+}
+export const SampleFormProvider = ({ defaultValues, children }: Props) => {
+  const methods = useDefaultForm<SampleFormSchema>(
     defaultValues,
     zodResolver(sampleFormSchema)
   )
+
+  return <FormProvider {...methods}>{children}</FormProvider>
 }

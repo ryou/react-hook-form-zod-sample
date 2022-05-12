@@ -1,7 +1,7 @@
 import {
+  SampleFormProvider,
   SampleFormSchema,
-  useSampleForm,
-} from '../components/Form/concrete/SampleForm/useSampleForm'
+} from '../components/Form/concrete/SampleForm/SampleFormProvider'
 import { NetworkResult } from '../types/Network'
 import { delay } from '../libs/delay'
 import { Failure, Success } from '../libs/Result'
@@ -9,6 +9,7 @@ import { useNetworkFormSubmit } from '../components/Form/hooks/useNetworkFormSub
 import { Form } from '../components/Form/Form'
 import { SampleForm } from '../components/Form/concrete/SampleForm/SampleForm'
 import { NextPage } from 'next'
+import { useSampleFormContext } from '../components/Form/concrete/SampleForm/useSampleFormContext'
 
 const dummyPost = async (
   data: SampleFormSchema
@@ -30,15 +31,8 @@ const dummyPost = async (
   return new Success({})
 }
 
-const TopPage: NextPage = () => {
-  const useFormReturn = useSampleForm({
-    items: [
-      {
-        name: 'hoge',
-        url: 'foo',
-      },
-    ],
-  })
+const Content = () => {
+  const { useFormReturn } = useSampleFormContext()
 
   // フォームをSubmitした際に、通信する以外のケースも考えられる（ステップ形式のフォーム等で入力内容をStoreに保持する等）ので、通信する際のみの処理を
   // useFormSubmitで切り出して、通信する時のみ呼び出すようにする。
@@ -57,8 +51,25 @@ const TopPage: NextPage = () => {
       onSubmit={onSubmit}
       submitText="送信"
     >
-      <SampleForm useFormReturn={useFormReturn} />
+      <SampleForm />
     </Form>
+  )
+}
+
+const TopPage: NextPage = () => {
+  return (
+    <SampleFormProvider
+      defaultValues={{
+        items: [
+          {
+            name: 'hoge',
+            url: 'foo',
+          },
+        ],
+      }}
+    >
+      <Content />
+    </SampleFormProvider>
   )
 }
 

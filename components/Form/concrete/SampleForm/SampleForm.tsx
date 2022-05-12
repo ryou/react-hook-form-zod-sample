@@ -1,24 +1,22 @@
-import { useFieldArray, UseFormReturn } from 'react-hook-form'
 import { Button } from '../../../Button/Button'
 import classNames from 'classnames'
-import { SampleFormSchema } from './useSampleForm'
 import { FormGroup } from '../../FormGroup'
 import { InputWithValidation } from '../../../Input/InputWithValidation'
 import { CheckBoxWithValidation } from '../../../CheckBox/CheckBoxWithValidation'
 import { getRHFErrorMessages } from '../../../../libs/ReactHookFormUtils'
+import { useSampleFormContext } from './useSampleFormContext'
+import { useCallback } from 'react'
 
 //-------------------- Item Information --------------------
 
 type ItemInformationProps = {
-  useFormReturn: UseFormReturn<SampleFormSchema>
   index: number
-  onClickDelete?: () => void
 }
-const ItemInformation = ({
-  useFormReturn,
-  index,
-  onClickDelete,
-}: ItemInformationProps) => {
+const ItemInformation = ({ index }: ItemInformationProps) => {
+  const { useFormReturn, removeItem } = useSampleFormContext()
+
+  const onClickDelete = useCallback(() => removeItem(index), [index])
+
   return (
     <div className={classNames(['py-4', 'px-4', 'bg-base-200', 'rounded'])}>
       <div className={classNames(['mb-8'])}>
@@ -48,36 +46,21 @@ const ItemInformation = ({
 
 //-------------------- Item Information List --------------------
 
-type ItemInformationListProps = {
-  useFormReturn: UseFormReturn<SampleFormSchema>
-}
-const ItemInformationList = ({ useFormReturn }: ItemInformationListProps) => {
-  const { control } = useFormReturn
-  const { fields, append, remove } = useFieldArray({
-    name: 'items',
-    control,
-  })
+const ItemInformationList = () => {
+  const { itemFields, appendItem } = useSampleFormContext()
 
   const onClickAdd = () => {
-    append({
+    appendItem({
       name: '',
       url: '',
     })
   }
 
-  const onClickRemove = (index: number) => {
-    remove(index)
-  }
-
   return (
     <div className={classNames(['my-8'])}>
-      {fields.map((field, index) => (
+      {itemFields.map((field, index) => (
         <div key={field.id} className={classNames(['mb-8'])}>
-          <ItemInformation
-            index={index}
-            onClickDelete={() => onClickRemove(index)}
-            useFormReturn={useFormReturn}
-          />
+          <ItemInformation index={index} />
         </div>
       ))}
       <div className={classNames(['mt-8', 'text-center'])}>
@@ -89,10 +72,9 @@ const ItemInformationList = ({ useFormReturn }: ItemInformationListProps) => {
 
 //-------------------- Main --------------------
 
-type Props = {
-  useFormReturn: UseFormReturn<SampleFormSchema>
-}
-export const SampleForm = ({ useFormReturn }: Props) => {
+type Props = {}
+export const SampleForm = ({}: Props) => {
+  const { useFormReturn } = useSampleFormContext()
   const fullNameErrorMessages = getRHFErrorMessages(useFormReturn, 'fullName')
 
   return (
@@ -125,7 +107,7 @@ export const SampleForm = ({ useFormReturn }: Props) => {
         </FormGroup>
       </div>
       <div>
-        <ItemInformationList useFormReturn={useFormReturn} />
+        <ItemInformationList />
       </div>
       <div className={classNames(['mb-8'])}>
         <CheckBoxWithValidation
