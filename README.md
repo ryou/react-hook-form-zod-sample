@@ -12,7 +12,25 @@ Reactでフロントエンドバリデーションを実装する際の、自分
 
 https://tranquil-blancmange-3e1bdf.netlify.app/
 
-## 課題
+## 覚書
+
+### useFieldArrayは同じnameに対して複数箇所で呼び出してはいけない
+
+> Each useFieldArray is unique and has its own state update, which means you should not have multiple useFieldArray with the same name.
+
+> useFieldArrayはそれぞれ一意であり、状態の更新が可能である。つまり、同じ名前のuseFieldArrayを複数持つことはないはずである。
+
+[useFieldArray](https://react-hook-form.com/api/usefieldarray)
+
+useFieldArrayが返すfieldsは、同じuseFieldArrayが返した操作系メソッドで更新された時のみ更新されるっぽい。
+
+[例](https://tranquil-blancmange-3e1bdf.netlify.app/multiple_use_field_array)
+
+この例では、useFieldArrayを親と子コンポーネント両方で呼び出し、親から渡されたremoveと子自身のremoveそれぞれで操作した際の動作が確認できる。 子自身のremoveを使用する削除ボタンでは想定外の動作をする。
+
+これは親コンポーネントのfieldsでループを回してるのだが、子コンポーネントでremoveした場合親コンポーネントのfieldsが更新されないためこうなってしまっている。
+
+なので、useFieldArrayは一箇所でのみ呼び出し、Props経由で渡すようにしないといけない。（useFormContextを使ってるのに、結局Propsドリリングしないといけないものが出るというのは嫌な感じはある）
 
 ### formの入れ子をする方法に関して
 
